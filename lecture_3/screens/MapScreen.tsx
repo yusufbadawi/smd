@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import * as axios from 'axios';
 import { Button, Dimensions, SafeAreaView, StyleSheet, Text } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import MapView, { Marker } from 'react-native-maps';
+import ListScreen2 from "./ListScreen2";
+import Carousel from "../components/Carousel"
 
 const SearchResults = () => {
   const route = useRoute<RouteProps>();
@@ -23,25 +25,42 @@ const SearchResults = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.default.get(`http://localhost:3000/locations/${term}`),
-      axios.default.get(`http://localhost:3000/universities/${term}`),
+      axios.default.get(`http://192.168.100.11:3000/locations/${term}`),
+      axios.default.get(`http://192.168.100.11:3000/universities/${term}`),
     ])
       .then(([{ data: locationResults }, { data: universitiesResults }]) => {
         if (locationResults) setCountry(locationResults);
         if (universitiesResults) setUniversity(universitiesResults);
       });
   }, []);
+  
 
+  const navigation = useNavigation() ; 
   return (
+   
+
     <SafeAreaView>
       <Button
-        onPress={() => console.log('List Univeristies Button')}
+        onPress={() => {navigation.navigate('ListScreen2', {
+          term: term, 
+        });
+      }}
         title="List Universities"
-        color="#841584"
+        color="#000000"
+      />
+
+<Button
+        onPress={() => {navigation.navigate('Carousel', {
+          term: term, 
+        });
+      }}
+        title="Universities Carousel View"
+        color="#000334"
       />
 
       {country && term && latitudeDelta && longitudeDelta &&
         <MapView
+          userInterfaceStyle={'dark'}
           style={styles.map}
           zoomControlEnabled={true}
           provider='google'
@@ -61,8 +80,8 @@ const SearchResults = () => {
                   latitude: marker.lat,
                   longitude: marker.lng,
                 }}
-                title={Marker.name}
-                description={Marker.name}>
+                title={marker.name}
+                description={marker.slug}>
               </Marker>
             ))
           }
@@ -124,5 +143,6 @@ type University = {
   name: string;
   lat: number;
   lng: number;
+  slug: string;
 }
 export default SearchResults

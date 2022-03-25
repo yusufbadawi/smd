@@ -12,7 +12,7 @@ const data = [
     id: 2,
     title: 'I\'m Feeling Lucky',
     screen: 'MapScreen',
-  }
+  }, 
 ]
 
 const NavOptions = (props: NavProps) => {
@@ -40,10 +40,15 @@ const NavOptions = (props: NavProps) => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    alignContent: "center", 
+    alignItems: "center",
+
   },
   button: {
-    backgroundColor: "#f8f9fa",
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
     padding: 10,
+    borderRadius: 5, 
   },
   text: {
     color: "black",
